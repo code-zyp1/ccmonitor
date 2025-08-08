@@ -5,7 +5,19 @@
       "Bash(git init:*)",
       "Bash(git config:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:docs.gitbutler.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(mkdir:*)",
+      "Bash(npm install)",
+      "Bash(npm run type-check:*)",
+      "mcp__gitbutler__gitbutler_update_branches"
     ],
     "deny": []
   }

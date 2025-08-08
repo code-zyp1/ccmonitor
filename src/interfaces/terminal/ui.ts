@@ -26,6 +26,7 @@ export class TerminalUI {
       smartCSR: true,
       title: 'Claude Code Monitor',
       dockBorders: true,
+      tags: true,
       cursor: {
         artificial: true,
         shape: 'line',
@@ -70,7 +71,7 @@ export class TerminalUI {
       }
     })
 
-    // 使用量显示区  
+    // Usage display area  
     this.boxes.usage = blessed.box({
       parent: this.boxes.main,
       top: 3,
@@ -81,6 +82,7 @@ export class TerminalUI {
         type: 'line'
       },
       label: ' Usage Statistics ',
+      tags: true,
       style: {
         border: {
           fg: '#00ff88'
@@ -88,7 +90,7 @@ export class TerminalUI {
       }
     })
 
-    // 预测分析区
+    // Prediction analysis area
     this.boxes.prediction = blessed.box({
       parent: this.boxes.main,
       top: 3, 
@@ -99,6 +101,7 @@ export class TerminalUI {
         type: 'line'
       },
       label: ' Prediction Analysis ',
+      tags: true,
       style: {
         border: {
           fg: '#ffaa00'
@@ -106,7 +109,7 @@ export class TerminalUI {
       }
     })
 
-    // 模型分解区
+    // Model breakdown area
     this.boxes.models = blessed.box({
       parent: this.boxes.main,
       top: 11,
@@ -117,6 +120,7 @@ export class TerminalUI {
         type: 'line'
       },
       label: ' Model Usage ',
+      tags: true,
       style: {
         border: {
           fg: '#8888ff'
@@ -124,7 +128,7 @@ export class TerminalUI {
       }
     })
 
-    // 底部状态栏
+    // Bottom status bar
     this.boxes.footer = blessed.box({
       parent: this.boxes.main,
       bottom: 0,
@@ -132,13 +136,14 @@ export class TerminalUI {
       width: '100%-2',
       height: 3,
       content: '',
+      tags: true,
       style: {
         fg: 'white',
         bg: 'black'
       }
     })
 
-    // 渲染屏幕
+    // Render screen
     this.screen.render()
   }
 
@@ -193,14 +198,13 @@ export class TerminalUI {
 
     const { current, recent } = usage
     
-    // 创建进度条
+    // Create progress bar
     const progressBar = this.createProgressBar(current.percentage, 40)
-    const percentageColor = this.getPercentageColor(current.percentage)
     
     const content = [
       '',
       `  Current Usage: ${current.used.toLocaleString()} / ${current.limit.toLocaleString()} tokens`,
-      `  ${progressBar} ${percentageColor}${current.percentage.toFixed(1)}%{/}`,
+      `  [${progressBar}] ${current.percentage.toFixed(1)}%`,
       '',
       `  Last 1h: ${recent.lastHour.toLocaleString()} tokens`,
       `  Last 6h: ${recent.last6Hours.toLocaleString()} tokens`,  
@@ -220,7 +224,7 @@ export class TerminalUI {
     const { timeToLimit, confidence, burnRate, recommendation, message } = prediction
     
     const recommendationIcon = this.getRecommendationIcon(recommendation)
-    const confidenceBar = this.createProgressBar(confidence * 100, 20, '▓', '░')
+    const confidenceBar = this.createProgressBar(confidence * 100, 20, '#', '.')
     
     let timeText = 'Cannot predict'
     if (timeToLimit !== null) {
@@ -231,10 +235,10 @@ export class TerminalUI {
 
     const content = [
       '',
-      `  ${recommendationIcon} Status: ${this.getRecommendationText(recommendation)}`,
+      `  ${recommendationIcon} Status: ${this.getRecommendationTextPlain(recommendation)}`,
       `  Time to limit: ${timeText}`,
       `  Burn rate: ${burnRate.toFixed(1)} tokens/min`,
-      `  Confidence: ${confidenceBar} ${(confidence * 100).toFixed(0)}%`,
+      `  Confidence: [${confidenceBar}] ${(confidence * 100).toFixed(0)}%`,
       `  ${message}`,
       ''
     ].join('\n')
@@ -269,7 +273,7 @@ export class TerminalUI {
   private updateFooter(): void {
     if (!this.boxes.footer) return
 
-    const realtimeStatus = this.state.isRealtime ? '{green-fg}Live{/}' : '{red-fg}Paused{/}'
+    const realtimeStatus = this.state.isRealtime ? 'Live' : 'Paused'
     const timestamp = format(new Date(), 'HH:mm:ss')
     
     const footerText = [
@@ -289,9 +293,8 @@ export class TerminalUI {
     const fillWidth = Math.round((percentage / 100) * width)
     const emptyWidth = width - fillWidth
     
-    const color = this.getPercentageColor(percentage, false)
-    
-    return `{${color}}${filled.repeat(fillWidth)}{/}${empty.repeat(emptyWidth)}`
+    // Create progress bar without color tags for now
+    return `${filled.repeat(fillWidth)}${empty.repeat(emptyWidth)}`
   }
 
   private getStatusIcon(percentage: number): string {
@@ -299,15 +302,6 @@ export class TerminalUI {
     if (percentage >= 80) return '[WARN]'
     if (percentage >= 60) return '[INFO]'
     return '[OK]'
-  }
-
-  private getPercentageColor(percentage: number, withTag: boolean = true): string {
-    let color = 'green-fg'
-    if (percentage >= 95) color = 'red-fg'
-    else if (percentage >= 80) color = 'yellow-fg'
-    else if (percentage >= 60) color = 'cyan-fg'
-    
-    return withTag ? `{${color}}` : color
   }
 
   private getRecommendationIcon(recommendation: PredictionResult['recommendation']): string {
@@ -320,12 +314,12 @@ export class TerminalUI {
     }
   }
 
-  private getRecommendationText(recommendation: PredictionResult['recommendation']): string {
+  private getRecommendationTextPlain(recommendation: PredictionResult['recommendation']): string {
     switch (recommendation) {
-      case 'critical': return '{red-fg}CRITICAL{/}'
-      case 'pause': return '{yellow-fg}PAUSE{/}'  
-      case 'slow_down': return '{cyan-fg}SLOW DOWN{/}'
-      case 'continue': return '{green-fg}CONTINUE{/}'
+      case 'critical': return 'CRITICAL'
+      case 'pause': return 'PAUSE'  
+      case 'slow_down': return 'SLOW DOWN'
+      case 'continue': return 'CONTINUE'
       default: return 'UNKNOWN'
     }
   }

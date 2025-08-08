@@ -4,6 +4,7 @@ import { EventEmitter } from 'events'
 import { resolve, join } from 'path'
 import { homedir } from 'os'
 import type { ClaudeLogEntry, MonitorConfig } from './types.js'
+import { createTestLogFile } from '../shared/testData.js'
 
 export class ClaudeLogMonitor extends EventEmitter {
   private config: MonitorConfig
@@ -19,9 +20,19 @@ export class ClaudeLogMonitor extends EventEmitter {
   async start(): Promise<void> {
     if (this.isRunning) return
 
-    const logPath = await this.findLogFile()
+    let logPath = await this.findLogFile()
     if (!logPath) {
-      throw new Error('Claude Code日志文件未找到')
+      const searchPaths = this.getLogPaths()
+      console.error('\nSearched for log files in:')
+      searchPaths.forEach(path => console.error(`  - ${path}`))
+      console.error('\nNo log files found. Creating test data...')
+      
+      // Create test log file
+      const testLogPath = join(searchPaths[0], 'test-usage.jsonl')
+      createTestLogFile(testLogPath)
+      logPath = testLogPath
+      
+      console.log('Test data created. Monitor will use sample data.')
     }
 
     this.config.logPath = logPath
@@ -48,8 +59,10 @@ export class ClaudeLogMonitor extends EventEmitter {
     
     for (const basePath of possiblePaths) {
       try {
+        console.log(`Checking: ${basePath}`)
         if (existsSync(basePath)) {
-          // 查找最新的日志文件
+          console.log(`  Directory exists: ${basePath}`)
+          // Find the latest log file
           const files = await import('fs').then(fs => 
             fs.readdirSync(basePath, { withFileTypes: true })
           )
@@ -62,11 +75,16 @@ export class ClaudeLogMonitor extends EventEmitter {
             }))
             .sort((a, b) => b.mtime.getTime() - a.mtime.getTime())
 
+          console.log(`  Found ${jsonlFiles.length} JSONL files`)
           if (jsonlFiles.length > 0) {
+            console.log(`  Using: ${jsonlFiles[0].path}`)
             return jsonlFiles[0].path
           }
+        } else {
+          console.log(`  Directory does not exist: ${basePath}`)
         }
       } catch (error) {
+        console.log(`  Error accessing ${basePath}: ${error}`)
         continue
       }
     }

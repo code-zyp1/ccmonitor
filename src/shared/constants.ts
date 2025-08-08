@@ -59,23 +59,23 @@ export const COLORS = {
   muted: '#888888'
 } as const
 
-// ASCII艺术和符号
+// ASCII艺术和符号 - Windows兼容版本
 export const SYMBOLS = {
   progress: {
-    filled: '█',
-    empty: '░',
-    partial: ['▏', '▎', '▍', '▌', '▋', '▊', '▉']
+    filled: '#',
+    empty: '.',
+    partial: ['|', '/', '-', '\\', '|', '/', '-', '\\']
   },
   status: {
-    ok: '✓',
-    warning: '⚠',
-    error: '✗',
-    info: 'ℹ'
+    ok: '[OK]',
+    warning: '[!]',
+    error: '[X]',
+    info: '[i]'
   },
   arrows: {
-    up: '↑',
-    down: '↓', 
-    right: '→',
-    left: '←'
+    up: '^',
+    down: 'v', 
+    right: '>',
+    left: '<'
   }
 } as const

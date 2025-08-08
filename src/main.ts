@@ -58,7 +58,7 @@ class CCMonitor {
     })
 
     this.monitor.on('error' as any, (error: Error) => {
-      this.ui.showError(`监控错误: ${error.message}`)
+      this.ui.showError(`Monitor error: ${error.message}`)
       console.error('Monitor error:', error)
     })
 
@@ -105,7 +105,7 @@ class CCMonitor {
 
   async start(): Promise<void> {
     try {
-      console.log('🤖 启动 Claude Code Monitor...')
+      console.log('Starting Claude Code Monitor...')
       console.log('')
       
       // 解析命令行参数
@@ -113,11 +113,11 @@ class CCMonitor {
       
       // 启动日志监控
       await this.monitor.start()
-      console.log(`✅ 监控已启动，刷新间隔: ${this.config.refreshInterval}秒`)
+      console.log(`Monitor started, refresh interval: ${this.config.refreshInterval}s`)
       const currentLimit = this.config.currentPlan === 'custom' && this.config.limits.custom 
         ? this.config.limits.custom
         : this.config.limits[this.config.currentPlan as keyof typeof this.config.limits] || 0
-      console.log(`📋 当前计划: ${this.config.currentPlan.toUpperCase()} (${currentLimit.toLocaleString()} tokens)`)
+      console.log(`Current plan: ${this.config.currentPlan.toUpperCase()} (${currentLimit.toLocaleString()} tokens)`)
       console.log('')
       
       // 初始化显示
@@ -128,15 +128,15 @@ class CCMonitor {
         this.updateDisplay()
       }, this.config.refreshInterval * 1000)
       
-      console.log('🎯 监控界面已启动，按 Q 或 Ctrl+C 退出')
+      console.log('Monitor interface started, press Q or Ctrl+C to exit')
       
     } catch (error) {
-      console.error('❌ 启动失败:', (error as Error).message)
+      console.error('Failed to start:', (error as Error).message)
       console.error('')
-      console.error('请检查:')
-      console.error('1. Claude Code 是否已安装并运行过')
-      console.error('2. 日志文件是否存在')
-      console.error('3. 是否有足够的文件读取权限')
+      console.error('Please check:')
+      console.error('1. Claude Code is installed and has been run before')
+      console.error('2. Log files exist')
+      console.error('3. Sufficient file read permissions')
       process.exit(1)
     }
   }
@@ -190,36 +190,36 @@ class CCMonitor {
 
   private showHelp(): void {
     console.log(`
-🤖 Claude Code Monitor v0.1.0
+Claude Code Monitor v0.1.0
 
-用法:
+Usage:
   ccmonitor [options]
 
-选项:
-  -p, --plan <plan>          设置计划类型 (pro|max5|max20)
-  -l, --custom-limit <num>   设置自定义token限制
-  -r, --refresh <seconds>    设置刷新间隔 (1-60秒, 默认3秒)
-  -h, --help                 显示帮助信息
-  -v, --version              显示版本信息
+Options:
+  -p, --plan <plan>          Set plan type (pro|max5|max20)
+  -l, --custom-limit <num>   Set custom token limit
+  -r, --refresh <seconds>    Set refresh interval (1-60s, default 3s)
+  -h, --help                 Show help information
+  -v, --version              Show version information
 
-示例:
-  ccmonitor                  # 使用默认设置 (pro计划)
-  ccmonitor --plan max5      # 使用Max5计划
-  ccmonitor --custom-limit 1000000 --refresh 5  # 自定义限制和刷新间隔
+Examples:
+  ccmonitor                  # Use default settings (pro plan)
+  ccmonitor --plan max5      # Use Max5 plan
+  ccmonitor --custom-limit 1000000 --refresh 5  # Custom limit and refresh
 
-快捷键:
-  Q / Esc / Ctrl+C          退出程序
-  R                         切换实时监控/暂停  
-  P                         显示/隐藏预测分析
-  M                         显示/隐藏模型统计
-  H / ?                     显示帮助信息
+Keyboard Shortcuts:
+  Q / Esc / Ctrl+C          Exit program
+  R                         Toggle real-time monitoring
+  P                         Show/hide prediction analysis
+  M                         Show/hide model statistics
+  H / ?                     Show help information
 
-更多信息: https://github.com/your-username/ccmonitor
+More info: https://github.com/your-username/ccmonitor
 `)
   }
 
   stop(): void {
-    console.log('\\n🛑 正在停止监控...')
+    console.log('\\nStopping monitor...')
     
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
@@ -229,7 +229,7 @@ class CCMonitor {
     this.monitor.stop()
     this.ui.destroy()
     
-    console.log('✅ 监控已停止')
+    console.log('Monitor stopped')
     process.exit(0)
   }
 }

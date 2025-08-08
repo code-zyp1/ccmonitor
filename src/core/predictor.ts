@@ -33,7 +33,7 @@ export class UsagePredictor {
         confidence: 1.0,
         burnRate: 0,
         recommendation: 'critical',
-        message: '已达到使用限制'
+        message: 'Usage limit reached'
       }
     }
 
@@ -65,7 +65,7 @@ export class UsagePredictor {
         confidence: 0.1,
         burnRate: 0,
         recommendation: 'continue',
-        message: '使用率较低，可以继续使用'
+        message: 'Low usage rate, continue using'
       }
     }
 
@@ -101,7 +101,7 @@ export class UsagePredictor {
         confidence: 0.5,
         burnRate: 0,
         recommendation: 'continue',
-        message: '当前无明显使用趋势'
+        message: 'No clear usage trend detected'
       }
     }
 
@@ -328,24 +328,24 @@ export class UsagePredictor {
     timeToResetMinutes: number
   ): string {
     if (timeToLimitMinutes === null) {
-      return '当前使用率较低，可以正常使用'
+      return 'Low usage rate, safe to continue'
     }
 
     if (timeToLimitMinutes > timeToResetMinutes) {
-      return `预计在重置前不会达到限制，剩余 ${Math.round(timeToResetMinutes)} 分钟重置`
+      return `Won't reach limit before reset in ${Math.round(timeToResetMinutes)} min`
     }
 
     const hours = Math.floor(timeToLimitMinutes / 60)
     const minutes = Math.round(timeToLimitMinutes % 60)
     
     if (timeToLimitMinutes < 15) {
-      return `⚠️ 紧急：预计 ${minutes} 分钟后达到限制！`
+      return `URGENT: Limit reached in ${minutes} min!`
     } else if (timeToLimitMinutes < 60) {
-      return `⚠️ 警告：预计 ${minutes} 分钟后达到限制，建议暂停使用`
+      return `WARNING: Limit in ${minutes} min, consider pausing`
     } else if (timeToLimitMinutes < timeToResetMinutes * 0.7) {
-      return `📊 建议放慢使用频率，预计 ${hours > 0 ? `${hours}小时` : ''}${minutes}分钟后达到限制`
+      return `Suggest slowing usage, limit in ${hours > 0 ? `${hours}h ` : ''}${minutes}min`
     } else {
-      return `✅ 当前使用率适中，预计 ${hours > 0 ? `${hours}小时` : ''}${minutes}分钟后达到限制`
+      return `Usage rate OK, limit in ${hours > 0 ? `${hours}h ` : ''}${minutes}min`
     }
   }
 

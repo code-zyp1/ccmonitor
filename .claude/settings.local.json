@@ -17,7 +17,8 @@
       "Bash(mkdir:*)",
       "Bash(npm install)",
       "Bash(npm run type-check:*)",
-      "mcp__gitbutler__gitbutler_update_branches"
+      "mcp__gitbutler__gitbutler_update_branches",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }

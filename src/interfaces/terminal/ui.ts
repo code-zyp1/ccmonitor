@@ -80,7 +80,7 @@ export class TerminalUI {
       border: {
         type: 'line'
       },
-      label: ' 📊 使用量统计 ',
+      label: ' Usage Statistics ',
       style: {
         border: {
           fg: '#00ff88'
@@ -98,7 +98,7 @@ export class TerminalUI {
       border: {
         type: 'line'
       },
-      label: ' 🔮 预测分析 ',
+      label: ' Prediction Analysis ',
       style: {
         border: {
           fg: '#ffaa00'
@@ -116,7 +116,7 @@ export class TerminalUI {
       border: {
         type: 'line'
       },
-      label: ' 🤖 模型使用 ',
+      label: ' Model Usage ',
       style: {
         border: {
           fg: '#8888ff'
@@ -183,7 +183,7 @@ export class TerminalUI {
     const resetTime = format(current.resetTime, 'HH:mm:ss')
     const statusIcon = this.getStatusIcon(current.percentage)
     
-    const headerText = ` ${statusIcon} Claude Code Monitor - 下次重置: ${resetTime} (${current.timeToReset}分钟) `
+    const headerText = ` ${statusIcon} Claude Code Monitor - Next Reset: ${resetTime} (${current.timeToReset} min) `
     
     this.boxes.header.setContent(headerText)
   }
@@ -199,15 +199,15 @@ export class TerminalUI {
     
     const content = [
       '',
-      `  当前使用量: ${current.used.toLocaleString()} / ${current.limit.toLocaleString()} tokens`,
+      `  Current Usage: ${current.used.toLocaleString()} / ${current.limit.toLocaleString()} tokens`,
       `  ${progressBar} ${percentageColor}${current.percentage.toFixed(1)}%{/}`,
       '',
-      `  📈 最近1小时: ${recent.lastHour.toLocaleString()} tokens`,
-      `  📊 最近6小时: ${recent.last6Hours.toLocaleString()} tokens`,  
-      `  🎯 当前会话: ${recent.currentSession.toLocaleString()} tokens`,
-      `  ⚡ 平均速率: ${recent.averagePerHour.toFixed(0)} tokens/小时`,
+      `  Last 1h: ${recent.lastHour.toLocaleString()} tokens`,
+      `  Last 6h: ${recent.last6Hours.toLocaleString()} tokens`,  
+      `  Session: ${recent.currentSession.toLocaleString()} tokens`,
+      `  Rate: ${recent.averagePerHour.toFixed(0)} tokens/hour`,
       '',
-      `  ⏰ 距离重置: ${current.timeToReset} 分钟`,
+      `  Reset in: ${current.timeToReset} min`,
       ''
     ].join('\\n')
 
@@ -231,11 +231,11 @@ export class TerminalUI {
 
     const content = [
       '',
-      `  ${recommendationIcon} 预测状态: ${this.getRecommendationText(recommendation)}`,
-      `  ⏱️  达到限制: ${timeText}`,
-      `  🔥 消耗速率: ${burnRate.toFixed(1)} tokens/分钟`,
-      `  📊 置信度: ${confidenceBar} ${(confidence * 100).toFixed(0)}%`,
-      `  💡 ${message}`,
+      `  ${recommendationIcon} Status: ${this.getRecommendationText(recommendation)}`,
+      `  Time to limit: ${timeText}`,
+      `  Burn rate: ${burnRate.toFixed(1)} tokens/min`,
+      `  Confidence: ${confidenceBar} ${(confidence * 100).toFixed(0)}%`,
+      `  ${message}`,
       ''
     ].join('\\n')
 
@@ -250,7 +250,7 @@ export class TerminalUI {
       .slice(0, 3) // 只显示前3个模型
 
     if (modelEntries.length === 0) {
-      this.boxes.models.setContent('\\n  暂无使用数据')
+      this.boxes.models.setContent('\\n  No usage data')
       return
     }
 
@@ -269,12 +269,12 @@ export class TerminalUI {
   private updateFooter(): void {
     if (!this.boxes.footer) return
 
-    const realtimeStatus = this.state.isRealtime ? '{green-fg}实时{/}' : '{red-fg}暂停{/}'
+    const realtimeStatus = this.state.isRealtime ? '{green-fg}Live{/}' : '{red-fg}Paused{/}'
     const timestamp = format(new Date(), 'HH:mm:ss')
     
     const footerText = [
-      ` 状态: ${realtimeStatus} | 更新时间: ${timestamp}`,
-      ` 快捷键: [Q]退出 [R]暂停/恢复 [P]预测 [M]模型 [H]帮助`
+      ` Status: ${realtimeStatus} | Updated: ${timestamp}`,
+      ` Keys: [Q]Quit [R]Pause [P]Prediction [M]Models [H]Help`
     ].join('\\n')
 
     this.boxes.footer.setContent(footerText)
@@ -295,10 +295,10 @@ export class TerminalUI {
   }
 
   private getStatusIcon(percentage: number): string {
-    if (percentage >= 95) return '🚨'
-    if (percentage >= 80) return '⚠️'
-    if (percentage >= 60) return '📊'
-    return '✅'
+    if (percentage >= 95) return '[CRIT]'
+    if (percentage >= 80) return '[WARN]'
+    if (percentage >= 60) return '[INFO]'
+    return '[OK]'
   }
 
   private getPercentageColor(percentage: number, withTag: boolean = true): string {
@@ -312,21 +312,21 @@ export class TerminalUI {
 
   private getRecommendationIcon(recommendation: PredictionResult['recommendation']): string {
     switch (recommendation) {
-      case 'critical': return '🚨'
-      case 'pause': return '⏸️'
-      case 'slow_down': return '🐌'
-      case 'continue': return '✅'
-      default: return 'ℹ️'
+      case 'critical': return '[STOP]'
+      case 'pause': return '[WAIT]'
+      case 'slow_down': return '[SLOW]'
+      case 'continue': return '[OK]'
+      default: return '[INFO]'
     }
   }
 
   private getRecommendationText(recommendation: PredictionResult['recommendation']): string {
     switch (recommendation) {
-      case 'critical': return '{red-fg}紧急停止{/}'
-      case 'pause': return '{yellow-fg}建议暂停{/}'  
-      case 'slow_down': return '{cyan-fg}减慢使用{/}'
-      case 'continue': return '{green-fg}正常使用{/}'
-      default: return '未知状态'
+      case 'critical': return '{red-fg}CRITICAL{/}'
+      case 'pause': return '{yellow-fg}PAUSE{/}'  
+      case 'slow_down': return '{cyan-fg}SLOW DOWN{/}'
+      case 'continue': return '{green-fg}CONTINUE{/}'
+      default: return 'UNKNOWN'
     }
   }
 
@@ -376,25 +376,25 @@ export class TerminalUI {
       border: {
         type: 'line'
       },
-      label: ' 帮助信息 ',
+      label: ' Help Information ',
       content: [
         '',
-        '  🔧 快捷键:',
-        '  ─────────────────────────────────────',  
-        '  Q / Esc / Ctrl+C  退出程序',
-        '  R                 切换实时监控/暂停',
-        '  P                 显示/隐藏预测分析',
-        '  M                 显示/隐藏模型统计',
-        '  H / ?            显示此帮助信息',
+        '  Keyboard Shortcuts:',
+        '  ===================================',  
+        '  Q / Esc / Ctrl+C  Exit program',
+        '  R                 Toggle real-time monitoring',
+        '  P                 Show/hide prediction analysis',
+        '  M                 Show/hide model statistics',
+        '  H / ?             Show this help information',
         '',
-        '  📊 界面说明:',
-        '  ─────────────────────────────────────',
-        '  • 绿色: 正常使用 (< 60%)',
-        '  • 蓝色: 注意用量 (60-80%)', 
-        '  • 黄色: 接近限制 (80-95%)',
-        '  • 红色: 达到限制 (≥ 95%)',
+        '  Interface Guide:',
+        '  ===================================',
+        '  * Green: Normal usage (< 60%)',
+        '  * Blue: Watch usage (60-80%)', 
+        '  * Yellow: Near limit (80-95%)',
+        '  * Red: At limit (>= 95%)',
         '',
-        '  按任意键关闭帮助...'
+        '  Press any key to close help...'
       ].join('\\n'),
       style: {
         border: {
@@ -422,8 +422,8 @@ export class TerminalUI {
       border: {
         type: 'line'
       },
-      label: ' 错误 ',
-      content: `\\n\\n  ❌ ${error}\\n\\n  按任意键继续...`,
+      label: ' Error ',
+      content: `\\n\\n  [X] ${error}\\n\\n  Press any key to continue...`,
       style: {
         border: {
           fg: 'red'

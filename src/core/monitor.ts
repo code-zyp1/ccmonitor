@@ -36,12 +36,12 @@ export class ClaudeLogMonitor extends EventEmitter {
     }
 
     this.config.logPath = logPath
-    console.log(`监听日志文件: ${logPath}`)
+    console.log(`Monitoring log file: ${logPath}`)
     
-    // 读取现有内容
+    // Read existing content
     await this.readExistingLogs()
     
-    // 开始监听文件变化
+    // Start watching file changes
     this.startWatching()
     this.isRunning = true
   }
@@ -123,8 +123,8 @@ export class ClaudeLogMonitor extends EventEmitter {
       const content = await readFile(this.config.logPath, 'utf-8')
       this.lastPosition = Buffer.byteLength(content, 'utf-8')
       
-      // 解析现有日志以建立基线
-      const lines = content.trim().split('\\n').filter(line => line.trim())
+      // Parse existing logs to establish baseline
+      const lines = content.trim().split('\n').filter(line => line.trim())
       const entries: ClaudeLogEntry[] = []
       
       for (const line of lines) {
@@ -134,7 +134,7 @@ export class ClaudeLogMonitor extends EventEmitter {
             entries.push(entry)
           }
         } catch (error) {
-          // 忽略解析失败的行
+          // Ignore failed parsing lines
         }
       }
 
@@ -142,7 +142,7 @@ export class ClaudeLogMonitor extends EventEmitter {
         this.emit('logs_loaded', entries)
       }
     } catch (error) {
-      console.warn('读取现有日志失败:', error)
+      console.warn('Failed to read existing logs:', error)
       this.lastPosition = 0
     }
   }
@@ -161,10 +161,10 @@ export class ClaudeLogMonitor extends EventEmitter {
       const currentSize = stats.size
       
       if (currentSize > this.lastPosition) {
-        // 读取新增内容
+        // Read new content
         const content = readFileSync(this.config.logPath, 'utf-8')
         const newContent = content.slice(this.lastPosition)
-        const newLines = newContent.trim().split('\\n').filter(line => line.trim())
+        const newLines = newContent.trim().split('\n').filter(line => line.trim())
         
         for (const line of newLines) {
           try {
@@ -173,13 +173,13 @@ export class ClaudeLogMonitor extends EventEmitter {
               this.emit('new_entry', entry)
             }
           } catch (error) {
-            console.warn('解析日志行失败:', line, error)
+            console.warn('Failed to parse log line:', line, error)
           }
         }
         
         this.lastPosition = currentSize
       } else if (currentSize < this.lastPosition) {
-        // 文件被截断或重新创建，重新读取
+        // File truncated or recreated, re-read
         this.lastPosition = 0
         await this.readExistingLogs()
       }
@@ -192,7 +192,7 @@ export class ClaudeLogMonitor extends EventEmitter {
     try {
       const data = JSON.parse(line)
       
-      // 检查是否是Claude使用记录
+      // Check if it's Claude usage record
       if (!data.model || !data.input_tokens || !data.output_tokens) {
         return null
       }
@@ -214,7 +214,7 @@ export class ClaudeLogMonitor extends EventEmitter {
     }
   }
 
-  // TypeScript事件类型安全
+  // TypeScript event type safety
   override on(event: 'new_entry', listener: (entry: ClaudeLogEntry) => void): this
   override on(event: 'logs_loaded', listener: (entries: ClaudeLogEntry[]) => void): this  
   override on(event: 'error', listener: (error: Error) => void): this

@@ -16,17 +16,17 @@ class CCMonitor {
   private refreshTimer: NodeJS.Timeout | null = null
 
   constructor() {
-    // 初始化配置
+    // Initialize configuration
     this.config = {
-      logPath: '', // 将通过monitor.start()自动检测
+      logPath: '', // Will be auto-detected by monitor.start()
       refreshInterval: DEFAULT_CONFIG.refreshInterval,
       predictionWindow: DEFAULT_CONFIG.predictionWindow,
       limits: PLAN_LIMITS,
-      currentPlan: 'pro', // 默认pro计划，可以通过命令行参数或配置文件修改
+      currentPlan: 'pro', // Default pro plan, can be modified via command line args or config file
       warningThresholds: DEFAULT_CONFIG.warningThresholds
     }
 
-    // 初始化组件
+    // Initialize components
     this.monitor = new ClaudeLogMonitor(this.config)
     this.calculator = new UsageCalculator(this.config)
     this.predictor = new UsagePredictor()
@@ -36,7 +36,7 @@ class CCMonitor {
   }
 
   private setupEventHandlers(): void {
-    // 监听日志变化
+    // Listen for log changes
     this.monitor.on('logs_loaded' as any, (entries: ClaudeLogEntry[]) => {
       this.calculator.addEntries(entries)
       this.updatePredictorHistory(entries)
@@ -46,7 +46,7 @@ class CCMonitor {
     this.monitor.on('new_entry' as any, (entry: ClaudeLogEntry) => {
       this.calculator.addEntry(entry)
       
-      // 更新预测器历史数据
+      // Update predictor history data
       const usage = this.calculator.calculateUsage()
       this.predictor.addDataPoint(
         entry.timestamp,
@@ -62,7 +62,7 @@ class CCMonitor {
       console.error('Monitor error:', error)
     })
 
-    // 进程退出处理
+    // Process exit handling
     process.on('SIGINT', () => {
       this.stop()
     })
@@ -78,7 +78,7 @@ class CCMonitor {
   }
 
   private updatePredictorHistory(entries: ClaudeLogEntry[]): void {
-    // 按时间排序并更新预测器历史数据
+    // Sort by time and update predictor history data
     const sortedEntries = [...entries].sort((a, b) => a.timestamp - b.timestamp)
     
     let cumulativeTokens = 0
@@ -108,10 +108,10 @@ class CCMonitor {
       console.log('Starting Claude Code Monitor...')
       console.log('')
       
-      // 解析命令行参数
+      // Parse command line arguments
       this.parseCommandLineArgs()
       
-      // 启动日志监控
+      // Start log monitoring
       await this.monitor.start()
       console.log(`Monitor started, refresh interval: ${this.config.refreshInterval}s`)
       const currentLimit = this.config.currentPlan === 'custom' && this.config.limits.custom 
@@ -120,10 +120,10 @@ class CCMonitor {
       console.log(`Current plan: ${this.config.currentPlan.toUpperCase()} (${currentLimit.toLocaleString()} tokens)`)
       console.log('')
       
-      // 初始化显示
+      // Initialize display
       this.updateDisplay()
       
-      // 设置定时刷新
+      // Set up periodic refresh
       this.refreshTimer = setInterval(() => {
         this.updateDisplay()
       }, this.config.refreshInterval * 1000)
@@ -219,7 +219,7 @@ More info: https://github.com/your-username/ccmonitor
   }
 
   stop(): void {
-    console.log('\\nStopping monitor...')
+    console.log('\nStopping monitor...')
     
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
@@ -234,14 +234,14 @@ More info: https://github.com/your-username/ccmonitor
   }
 }
 
-// 启动应用
+// Start application
 async function main() {
   const app = new CCMonitor()
   await app.start()
 }
 
-// 错误处理
+// Error handling
 main().catch((error) => {
-  console.error('💥 应用启动失败:', error)
+  console.error('Application startup failed:', error)
   process.exit(1)
 })

@@ -18,7 +18,11 @@
       "Bash(npm install)",
       "Bash(npm run type-check:*)",
       "mcp__gitbutler__gitbutler_update_branches",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout:*)",
+      "Bash(true)"
     ],
     "deny": []
   }

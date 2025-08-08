@@ -209,7 +209,7 @@ export class TerminalUI {
       '',
       `  Reset in: ${current.timeToReset} min`,
       ''
-    ].join('\\n')
+    ].join('\n')
 
     this.boxes.usage.setContent(content)
   }
@@ -222,7 +222,7 @@ export class TerminalUI {
     const recommendationIcon = this.getRecommendationIcon(recommendation)
     const confidenceBar = this.createProgressBar(confidence * 100, 20, '▓', '░')
     
-    let timeText = '无法预测'
+    let timeText = 'Cannot predict'
     if (timeToLimit !== null) {
       const hours = Math.floor(timeToLimit / 60)
       const minutes = Math.round(timeToLimit % 60)
@@ -237,7 +237,7 @@ export class TerminalUI {
       `  Confidence: ${confidenceBar} ${(confidence * 100).toFixed(0)}%`,
       `  ${message}`,
       ''
-    ].join('\\n')
+    ].join('\n')
 
     this.boxes.prediction.setContent(content)
   }
@@ -250,7 +250,7 @@ export class TerminalUI {
       .slice(0, 3) // 只显示前3个模型
 
     if (modelEntries.length === 0) {
-      this.boxes.models.setContent('\\n  No usage data')
+      this.boxes.models.setContent('\n  No usage data')
       return
     }
 
@@ -263,7 +263,7 @@ export class TerminalUI {
     }
     content.push('')
 
-    this.boxes.models.setContent(content.join('\\n'))
+    this.boxes.models.setContent(content.join('\n'))
   }
 
   private updateFooter(): void {
@@ -275,7 +275,7 @@ export class TerminalUI {
     const footerText = [
       ` Status: ${realtimeStatus} | Updated: ${timestamp}`,
       ` Keys: [Q]Quit [R]Pause [P]Prediction [M]Models [H]Help`
-    ].join('\\n')
+    ].join('\n')
 
     this.boxes.footer.setContent(footerText)
   }
@@ -395,7 +395,7 @@ export class TerminalUI {
         '  * Red: At limit (>= 95%)',
         '',
         '  Press any key to close help...'
-      ].join('\\n'),
+      ].join('\n'),
       style: {
         border: {
           fg: 'yellow'

@@ -1,3 +1,0 @@
-Debug test for hook triggering
-Time: 2025-08-09
-Should create hook-debug.log if hooks work

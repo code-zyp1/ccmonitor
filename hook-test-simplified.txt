@@ -1,4 +1,0 @@
-Testing simplified hook configuration
-- Using matcher: "*" to catch all tools
-- Using Windows path separator: scripts\\auto-commit-hook.bat
-- Should trigger PostToolUse hook after this Write operation

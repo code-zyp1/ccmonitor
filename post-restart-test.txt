@@ -1,5 +1,0 @@
-Testing hooks after Claude Code restart
-Time: 2025-08-09 
-Expected behavior:
-- PreToolUse hook should create pre-hook.txt before this Write operation
-- PostToolUse hook should create post-hook.txt after this Write operation

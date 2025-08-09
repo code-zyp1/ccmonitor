@@ -3,6 +3,9 @@
 import { ClaudeLogMonitor } from './core/monitor.js'
 import { UsageCalculator } from './core/calculator.js'
 import { UsagePredictor } from './core/predictor.js'
+import { PerformanceOptimizer } from './core/performance.js'
+import { NotificationManager } from './core/notifications.js'
+import { CacheManager } from './core/cache.js'
 import { TerminalUI } from './interfaces/terminal/ui.js'
 import { DEFAULT_CONFIG, PLAN_LIMITS } from './shared/constants.js'
 import type { MonitorConfig, ClaudeLogEntry } from './core/types.js'
@@ -11,6 +14,9 @@ class CCMonitor {
   private monitor: ClaudeLogMonitor
   private calculator: UsageCalculator
   private predictor: UsagePredictor
+  private optimizer: PerformanceOptimizer // Performance optimization module
+  private notificationManager: NotificationManager // Notification system
+  private cacheManager: CacheManager<any> // Caching system
   private ui: TerminalUI
   private config: MonitorConfig
   private refreshTimer: NodeJS.Timeout | null = null

@@ -2,6 +2,10 @@ import { subHours, isAfter, differenceInMinutes } from 'date-fns'
 import type { ClaudeLogEntry, UsageData, MonitorConfig, SessionInfo } from './types.js'
 import { PLAN_LIMITS, MODEL_COSTS, RESET_INTERVAL } from '../shared/constants.js'
 
+/**
+ * Usage Calculator - Monitors and calculates Claude usage statistics
+ * Provides real-time tracking of token usage and plan limits
+ */
 export class UsageCalculator {
   private entries: ClaudeLogEntry[] = []
   private config: MonitorConfig

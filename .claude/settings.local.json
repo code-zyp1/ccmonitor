@@ -22,7 +22,16 @@
       "WebFetch(domain:www.npmjs.com)",
       "Bash(npx tsc:*)",
       "Bash(timeout:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(but --version)",
+      "Bash(but --help)",
+      "Bash(but:*)",
+      "Bash(python:*)",
+      "Bash(del debug-hook.bat)",
+      "Bash(rm:*)",
+      "WebFetch(domain:gitbutler.com)",
+      "WebFetch(domain:blog.gitbutler.com)"
     ],
     "deny": []
   }

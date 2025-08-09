@@ -1,0 +1,4 @@
+Testing updated auto-commit hook
+- Fixed Claude CLI syntax issue  
+- Now uses --print mode with git diff input
+- Should generate proper AI commit messages

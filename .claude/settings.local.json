@@ -32,7 +32,8 @@
       "Bash(rm:*)",
       "WebFetch(domain:gitbutler.com)",
       "WebFetch(domain:blog.gitbutler.com)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(cmd /c:*)"
     ],
     "deny": []
   }

@@ -1,0 +1,4 @@
+Testing hooks with settings.local.json configuration
+Time: 18:48
+Expected: Should trigger auto-commit-hook.bat script
+This tests if settings.local.json has higher priority than settings.json

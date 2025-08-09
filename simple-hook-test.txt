@@ -1,0 +1,3 @@
+Testing simplest possible hook configuration
+Command: echo Hook triggered > hook-triggered.txt
+Should create hook-triggered.txt file if hooks work

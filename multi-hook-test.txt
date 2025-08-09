@@ -1,0 +1,7 @@
+Testing multiple hook events - UPDATED:
+- PreToolUse should create pre-hook.txt
+- PostToolUse should create post-hook.txt  
+- Stop should create stop-hook.txt when Claude Code session ends
+
+This Edit operation should trigger PreToolUse and PostToolUse hooks.
+Updated at: 2025-08-09 18:15

@@ -1,0 +1,5 @@
+#!/bin/bash
+# Intercept echo commands to debug hooks
+echo "INTERCEPTED ECHO: $@" >> hook-intercept.log
+echo "[DEBUG] Original echo intercepted at $(date)" >> hook-intercept.log
+echo "$@"

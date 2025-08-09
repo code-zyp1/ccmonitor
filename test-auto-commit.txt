@@ -1,0 +1,5 @@
+Auto-commit hooks test
+Test timestamp: 2025-01-12
+
+This file is created to test the automatic commit hook functionality.
+The hook should detect this change and generate an AI commit message.

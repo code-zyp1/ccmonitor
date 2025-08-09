@@ -1,0 +1,3 @@
+Testing auto-commit with debug logging enabled
+This should trigger the PostToolUse hook with debug output
+Debug log should be created at debug-hook.log

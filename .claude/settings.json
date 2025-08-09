@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "but claude pre-tool",
+            "description": "GitButler pre-tool hook - prepare for code changes"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write|NotebookEdit", 
+        "hooks": [
+          {
+            "type": "command",
+            "command": "but claude post-tool",
+            "description": "GitButler post-tool hook - process code changes"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "but claude stop", 
+            "description": "GitButler stop hook - finalize session"
+          }
+        ]
+      }
+    ]
+  }
+}
